@@ -18,7 +18,7 @@ services:
   # Capa 2: Backend API
   backend:
     build: ./backend
-    container_name: contenedor_Neptaly
+    container_name: contenedor_Neptaly_backend
     restart: always
     environment:
       DB_HOST: db
@@ -36,7 +36,7 @@ services:
   # Capa 3: Frontend Web
   frontend:
     build: ./frontend
-    container_name: contenedor_Neptaly
+    container_name: contenedor_Neptaly_frontend
     restart: always
     ports:
       - "8081:80"
