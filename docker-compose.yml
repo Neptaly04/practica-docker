@@ -25,9 +25,9 @@ services:
       POSTGRES_USER: ${POSTGRES_USER:-usuario_app}
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password_segura123}
       POSTGRES_DB: ${POSTGRES_DB:-mi_base_datos}
-      PORT: 3000
+      PORT: 8010
     ports:
-      - "3001:3000"
+      - "8010:8010"
     depends_on:
       - db
     networks:
