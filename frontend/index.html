@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS5 — Concepto de página de ventas (fan-made)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;900&family=Archivo+Black&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --void: #05070a;
+    --panel: #0e1116;
+    --white: #f4f6fa;
+    --ice: #7fd6ff;
+    --violet: #6b5cff;
+    --line: #1c2230;
+    --dim: #7a8296;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--void);
+    color:var(--white);
+    font-family:'Archivo', sans-serif;
+    overflow-x:hidden;
+  }
+  ::selection{background:var(--violet); color:var(--white);}
+  a{color:inherit; text-decoration:none;}
+  .mono{font-family:'JetBrains Mono', monospace;}
+
+  .fan-note{
+    background:var(--violet); color:var(--white); text-align:center;
+    font-family:'JetBrains Mono'; font-size:0.7rem; letter-spacing:0.05em;
+    padding:9px 20px;
+  }
+
+  header{
+    position:sticky; top:0; z-index:50;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:22px 6vw;
+    background:rgba(5,7,10,0.85); backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .logo{font-family:'Archivo Black'; font-size:1.3rem; letter-spacing:0.02em; display:flex; align-items:center; gap:8px;}
+  .logo .glyphs{display:flex; gap:5px;}
+  .glyph{width:9px; height:9px; border-radius:50%;}
+  .glyph.tri{background:var(--ice); border-radius:2px; transform:rotate(45deg);}
+  .glyph.circ{background:#ff5f7e;}
+  .glyph.x{background:var(--violet);}
+  .glyph.sq{background:#5fe3a3; border-radius:2px;}
+  nav{display:flex; gap:2.2rem; align-items:center;}
+  nav a.mono{font-size:0.72rem; letter-spacing:0.1em; text-transform:uppercase; color:var(--dim); transition:color .2s;}
+  nav a.mono:hover{color:var(--white);}
+  .nav-cta{background:var(--white); color:var(--void) !important; padding:10px 20px;}
+  .nav-cta:hover{background:var(--ice) !important;}
+  @media (max-width:860px){ nav a.mono:not(.nav-cta){display:none;} }
+
+  /* HERO */
+  .hero{
+    min-height:92vh; display:flex; flex-direction:column; justify-content:center;
+    padding:80px 6vw; position:relative;
+    background:
+      radial-gradient(ellipse 800px 500px at 80% 10%, rgba(107,92,255,0.18), transparent 60%),
+      radial-gradient(ellipse 700px 500px at 10% 90%, rgba(127,214,255,0.1), transparent 60%),
+      var(--void);
+  }
+  .hero-tag{
+    font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--ice);
+    display:flex; align-items:center; gap:12px; margin-bottom:26px;
+  }
+  .hero-tag::before{content:''; width:34px; height:1px; background:var(--ice);}
+  .hero h1{
+    font-family:'Archivo Black';
+    font-size:clamp(3.2rem, 9vw, 7.5rem);
+    line-height:0.92;
+    letter-spacing:-0.01em;
+  }
+  .hero h1 .grad{
+    background:linear-gradient(100deg, var(--ice), var(--violet));
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  .hero-sub{margin-top:28px; max-width:48ch; color:#b7bfd1; font-size:1.1rem; line-height:1.65;}
+  .hero-actions{display:flex; gap:22px; align-items:center; margin-top:44px; flex-wrap:wrap;}
+  .btn-primary{
+    background:var(--white); color:var(--void); padding:17px 34px; font-weight:700;
+    font-size:0.9rem; border:1px solid var(--white); transition:all .25s; cursor:pointer;
+  }
+  .btn-primary:hover{background:transparent; color:var(--white);}
+  .price-tag{font-family:'JetBrains Mono'; font-size:0.78rem; color:var(--dim);}
+  .price-tag b{display:block; color:var(--white); font-size:1.3rem; font-weight:700;}
+
+  /* ESTADO DE CONEXIÓN CON BACKEND */
+  .api-status-card {
+    margin-top: 35px;
+    padding: 18px 24px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    max-width: 520px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .api-status-title { font-size: 0.75rem; color: var(--ice); margin-bottom: 8px; text-transform: uppercase; }
+  .api-status-content { font-size: 0.85rem; color: var(--white); word-break: break-all; }
+
+  .console-render{
+    position:absolute; right:4vw; top:50%; transform:translateY(-50%);
+    width:340px; opacity:0.95;
+  }
+  @media (max-width:1100px){ .console-render{display:none;} }
+
+  /* MARQUEE */
+  .marquee{
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    padding:20px 0; overflow:hidden; white-space:nowrap; background:var(--panel);
+  }
+  .marquee-track{display:inline-block; animation:scroll 22s linear infinite;}
+  .marquee-track span{font-family:'Archivo Black'; font-size:1.4rem; color:var(--dim); margin:0 40px; letter-spacing:0.02em;}
+  .marquee-track span b{color:var(--white);}
+  @keyframes scroll{ from{transform:translateX(0);} to{transform:translateX(-50%);} }
+  @media (prefers-reduced-motion: reduce){ .marquee-track{animation:none;} }
+
+  section{padding:110px 6vw;}
+  .section-head{margin-bottom:60px; max-width:60ch;}
+  .section-eyebrow{font-family:'JetBrains Mono'; font-size:0.75rem; color:var(--violet); margin-bottom:14px;}
+  .section-title{font-family:'Archivo Black'; font-size:clamp(2.2rem,4.5vw,3.4rem); letter-spacing:-0.01em;}
+
+  /* SPECS GRID */
+  .spec-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--line); border:1px solid var(--line);}
+  .spec-card{background:var(--void); padding:40px 32px;}
+  .spec-card .icon-num{font-family:'JetBrains Mono'; color:var(--ice); font-size:0.75rem; margin-bottom:20px;}
+  .spec-card h3{font-family:'Archivo Black'; font-size:1.5rem; margin-bottom:10px;}
+  .spec-card p{color:var(--dim); font-size:0.9rem; line-height:1.6;}
+  @media (max-width:900px){ .spec-grid{grid-template-columns:1fr 1fr;} }
+  @media (max-width:600px){ .spec-grid{grid-template-columns:1fr;} }
+
+  /* FEATURE SPLIT */
+  .feature-split{display:grid; grid-template-columns:1fr 1fr; gap:70px; align-items:center;}
+  @media (max-width:900px){ .feature-split{grid-template-columns:1fr;} }
+  .feature-split.reverse .visual{order:2;}
+  .visual{
+    aspect-ratio:4/3; background:var(--panel); border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; position:relative; overflow:hidden;
+  }
+  .visual .waveform{display:flex; align-items:flex-end; gap:4px; height:60%;}
+  .visual .waveform i{width:6px; background:linear-gradient(180deg, var(--ice), var(--violet)); border-radius:2px;}
+  .feature-text .num{font-family:'JetBrains Mono'; color:var(--violet); font-size:0.8rem; margin-bottom:16px; display:block;}
+  .feature-text h3{font-family:'Archivo Black'; font-size:2rem; margin-bottom:16px;}
+  .feature-text p{color:var(--dim); font-size:1rem; line-height:1.7; max-width:44ch;}
+
+  /* COLOR/EDITIONS */
+  .editions{background:var(--panel); border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .edition-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:1px; background:var(--line);}
+  .edition-card{background:var(--panel); padding:50px 40px;}
+  .edition-card .swatch{width:100%; height:180px; margin-bottom:26px; border:1px solid var(--line);}
+  .edition-card.digital .swatch{background:linear-gradient(135deg, #f4f6fa, #c7cede);}
+  .edition-card.disc .swatch{background:linear-gradient(135deg, #1c2230, #05070a);}
+  .edition-card h3{font-family:'Archivo Black'; font-size:1.5rem; margin-bottom:10px;}
+  .edition-card p{color:var(--dim); font-size:0.9rem; margin-bottom:20px; max-width:38ch;}
+  .edition-price{font-family:'JetBrains Mono'; font-size:1.3rem; font-weight:700;}
+  @media (max-width:700px){ .edition-grid{grid-template-columns:1fr;} }
+
+  /* GAMES */
+  .game-strip{display:flex; gap:16px; overflow-x:auto; scrollbar-width:none;}
+  .game-strip::-webkit-scrollbar{display:none;}
+  .game-tile{
+    min-width:220px; aspect-ratio:3/4; flex-shrink:0; border:1px solid var(--line);
+    display:flex; flex-direction:column; justify-content:flex-end; padding:20px; position:relative;
+  }
+  .game-tile:nth-child(1){background:linear-gradient(160deg,#1c2f3a,#05070a);}
+  .game-tile:nth-child(2){background:linear-gradient(160deg,#2a1c3a,#05070a);}
+  .game-tile:nth-child(3){background:linear-gradient(160deg,#1c3a2a,#05070a);}
+  .game-tile:nth-child(4){background:linear-gradient(160deg,#3a1c22,#05070a);}
+  .game-tile:nth-child(5){background:linear-gradient(160deg,#2a2a1c,#05070a);}
+  .game-tile .mono{font-size:0.68rem; color:var(--ice); margin-bottom:6px;}
+  .game-tile h4{font-family:'Archivo Black'; font-size:1.1rem;}
+
+  /* CTA */
+  .final-cta{
+    text-align:center; padding:110px 6vw;
+    background:linear-gradient(180deg, var(--void), var(--panel));
+  }
+  .final-cta h2{font-family:'Archivo Black'; font-size:clamp(2.4rem,6vw,4rem); margin-bottom:22px;}
+  .final-cta p{color:var(--dim); max-width:44ch; margin:0 auto 40px;}
+  .stock-row{
+    display:inline-flex; gap:40px; margin-top:50px; padding-top:34px; border-top:1px solid var(--line);
+  }
+  .stock-row div{font-family:'JetBrains Mono'; font-size:0.68rem; color:var(--dim);}
+  .stock-row b{display:block; font-size:1.4rem; color:var(--white); font-weight:700; margin-bottom:6px;}
+
+  footer{
+    padding:40px 6vw; display:flex; justify-content:space-between; flex-wrap:wrap; gap:12px;
+    font-family:'JetBrains Mono'; font-size:0.66rem; color:var(--dim); border-top:1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<div class="fan-note">CONCEPTO DE DISEÑO NO OFICIAL — HECHO POR FAN, SIN AFILIACIÓN CON SONY</div>
+
+<header>
+  <div class="logo">
+    <div class="glyphs">
+      <span class="glyph tri"></span><span class="glyph circ"></span><span class="glyph x"></span><span class="glyph sq"></span>
+    </div>
+    PS5
+  </div>
+  <nav>
+    <a href="#specs" class="mono">Specs</a>
+    <a href="#experiencia" class="mono">Experiencia</a>
+    <a href="#ediciones" class="mono">Ediciones</a>
+    <a href="#juegos" class="mono">Juegos</a>
+    <a href="#comprar" class="nav-cta mono">Comprar ahora</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="hero-tag">GENERACIÓN ACTUAL · DISPONIBLE AHORA</div>
+  <h1>JUGÁ MÁS<br>ALLÁ DE LO<br><span class="grad">QUE VES.</span></h1>
+  <p class="hero-sub">SSD ultra rápido, gráficos con trazado de rayos y un control que responde al juego con vibración de precisión. Esto no es una actualización, es otra forma de sentir el juego.</p>
+  
+  <div class="hero-actions">
+    <button onclick="probarBackend()" class="btn-primary">Probar Conexión Backend →</button>
+    <div class="price-tag">Desde<b>$499.99</b></div>
+  </div>
+
+  <div class="api-status-card">
+    <div class="api-status-title"></div>
+    <div class="api-status-content" id="respuesta-api">Presiona el botón para verificar la conexión con la base de datos...</div>
+  </div>
+</section>
+
+<div class="marquee">
+  <div class="marquee-track">
+    <span><b>4K</b> GRÁFICOS</span><span><b>RAY TRACING</b> NATIVO</span><span><b>SSD</b> ULTRA RÁPIDO</span><span><b>3D AUDIO</b> INMERSIVO</span><span><b>DUALSENSE</b> HÁPTICO</span>
+    <span><b>4K</b> GRÁFICOS</span><span><b>RAY TRACING</b> NATIVO</span><span><b>SSD</b> ULTRA RÁPIDO</span><span><b>3D AUDIO</b> INMERSIVO</span><span><b>DUALSENSE</b> HÁPTICO</span>
+  </div>
+</div>
+
+<section id="specs">
+  <div class="section-head">
+    <div class="section-eyebrow">ESPECIFICACIONES</div>
+    <h2 class="section-title">Lo que hay adentro</h2>
+  </div>
+  <div class="spec-grid">
+    <div class="spec-card">
+      <div class="icon-num">01 / CPU</div>
+      <h3>8 núcleos, 3.5GHz</h3>
+      <p>Procesador AMD Zen 2 personalizado, con frecuencia variable según la carga del juego.</p>
+    </div>
+    <div class="spec-card">
+      <div class="icon-num">02 / GPU</div>
+      <h3>10.28 TFLOPS</h3>
+      <p>Arquitectura AMD RDNA 2 con trazado de rayos por hardware para iluminación realista.</p>
+    </div>
+    <div class="spec-card">
+      <div class="icon-num">03 / ALMACENAMIENTO</div>
+      <h3>SSD de 825GB</h3>
+      <p>Velocidad de lectura de hasta 5.5GB/s. Los tiempos de carga prácticamente desaparecen.</p>
+    </div>
+    <div class="spec-card">
+      <div class="icon-num">04 / RESOLUCIÓN</div>
+      <h3>Hasta 4K / 120fps</h3>
+      <p>Soporte para salida 8K y una experiencia visual fluida incluso en acción intensa.</p>
+    </div>
+    <div class="spec-card">
+      <div class="icon-num">05 / AUDIO</div>
+      <h3>Tempest 3D AudioTech</h3>
+      <p>Sonido posicional que cambia con cada movimiento, sin necesidad de parlantes especiales.</p>
+    </div>
+    <div class="spec-card">
+      <div class="icon-num">06 / CONTROL</div>
+      <h3>DualSense</h3>
+      <p>Gatillos adaptativos y retroalimentación háptica que traducen la física del juego a tu mano.</p>
+    </div>
+  </div>
+</section>
+
+<section id="experiencia">
+  <div class="feature-split">
+    <div class="feature-text">
+      <span class="num">— 01</span>
+      <h3>Cargas que casi no existen</h3>
+      <p>El SSD personalizado elimina los tiempos muertos entre pantallas de carga. Mundos abiertos que antes tardaban un minuto en aparecer, ahora están ahí en segundos.</p>
+    </div>
+    <div class="visual">
+      <div class="waveform">
+        <i style="height:40%"></i><i style="height:70%"></i><i style="height:35%"></i><i style="height:90%"></i>
+        <i style="height:55%"></i><i style="height:80%"></i><i style="height:45%"></i><i style="height:65%"></i>
+        <i style="height:30%"></i><i style="height:95%"></i><i style="height:50%"></i>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="feature-split reverse">
+    <div class="visual" style="order:2;">
+      <div class="waveform" style="align-items:center;">
+        <i style="height:20%"></i><i style="height:60%"></i><i style="height:90%"></i><i style="height:40%"></i>
+        <i style="height:75%"></i><i style="height:25%"></i><i style="height:85%"></i><i style="height:55%"></i>
+      </div>
+    </div>
+    <div class="feature-text" style="order:1;">
+      <span class="num">— 02</span>
+      <h3>Sentís el juego, no solo lo ves</h3>
+      <p>Los gatillos adaptativos del control cambian su resistencia según lo que hacés en pantalla: tensar un arco, frenar en el barro, disparar bajo presión.</p>
+    </div>
+  </div>
+</section>
+
+<section id="ediciones" class="editions">
+  <div class="section-head">
+    <div class="section-eyebrow">EDICIONES</div>
+    <h2 class="section-title">Elegí tu formato</h2>
+  </div>
+  <div class="edition-grid">
+    <div class="edition-card digital">
+      <div class="swatch"></div>
+      <h3>Edición Digital</h3>
+      <p>Sin lectora de discos. Todo tu catálogo desde la tienda digital, con la misma potencia interna.</p>
+      <div class="edition-price">$399.999</div>
+    </div>
+    <div class="edition-card disc">
+      <div class="swatch"></div>
+      <h3>Edición Estándar</h3>
+      <p>Con lectora 4K UHD. Jugá tus discos físicos y también accedé a la tienda digital.</p>
+      <div class="edition-price">$499.999</div>
+    </div>
+  </div>
+</section>
+
+<section id="juegos">
+  <div class="section-head">
+    <div class="section-eyebrow">CATÁLOGO</div>
+    <h2 class="section-title">Hecho para que se note la diferencia</h2>
+  </div>
+  <div class="game-strip">
+    <div class="game-tile"><div class="mono">ACCIÓN / AVENTURA</div><h4>Mundo Abierto</h4></div>
+    <div class="game-tile"><div class="mono">CARRERAS</div><h4>Velocidad Extrema</h4></div>
+    <div class="game-tile"><div class="mono">RPG</div><h4>Reino Perdido</h4></div>
+    <div class="game-tile"><div class="mono">DEPORTES</div><h4>Liga Total</h4></div>
+    <div class="game-tile"><div class="mono">TERROR</div><h4>Casa Silenciosa</h4></div>
+  </div>
+</section>
+
+<section id="comprar" class="final-cta">
+  <h2>Tu próxima<br>partida empieza acá.</h2>
+  <p>Envío gratis en compras desde la tienda oficial. Retiro en sucursal disponible en 24 horas.</p>
+  <a href="#" class="btn-primary">Comprar ahora →</a>
+  <div class="stock-row">
+    <div><b>En stock</b>DISPONIBILIDAD</div>
+    <div><b>12 cuotas</b>SIN INTERÉS</div>
+    <div><b>24 hs</b>ENVÍO EXPRESS</div>
+  </div>
+</section>
+
+<footer>
+  <span>CONCEPTO FAN-MADE — SIN AFILIACIÓN OFICIAL CON SONY INTERACTIVE ENTERTAINMENT</span>
+  <span>DISEÑO DEMO 2026</span>
+</footer>
+
+<script>
+  async function probarBackend() {
+    const resDiv = document.getElementById('respuesta-api');
+    resDiv.innerText = 'Consultando la base de datos PostgreSQL...';
+    try {
+      const res = await fetch('http://localhost:3001/api/datos');
+      const data = await res.json();
+      resDiv.innerHTML = `<span style="color:#7fd6ff;">✓ ${data.mensaje}</span><br><strong>Hora servidor DB:</strong> ${data.db_time}`;
+    } catch (err) {
+      resDiv.innerHTML = `<span style="color:#ff5f7e;">✕ Error de conexión con la API en el puerto 3001</span>`;
+    }
+  }
+</script>
+
+</body>
+</html>

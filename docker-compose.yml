@@ -1,0 +1,53 @@
+services:
+  # Capa 1: Base de datos
+  db:
+    image: postgres:15-alpine
+    container_name: contenedor_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-usuario_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password_segura123}
+      POSTGRES_DB: ${POSTGRES_DB:-mi_base_datos}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - red-proyecto
+
+  # Capa 2: Backend API
+  backend:
+    build: ./backend
+    container_name: contenedor_backend
+    restart: always
+    environment:
+      DB_HOST: db
+      POSTGRES_USER: ${POSTGRES_USER:-usuario_app}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password_segura123}
+      POSTGRES_DB: ${POSTGRES_DB:-mi_base_datos}
+      PORT: 3000
+    ports:
+      - "3001:3000"
+    depends_on:
+      - db
+    networks:
+      - red-proyecto
+
+  # Capa 3: Frontend Web
+  frontend:
+    build: ./frontend
+    container_name: contenedor_frontend
+    restart: always
+    ports:
+      - "8081:80"
+    depends_on:
+      - backend
+    networks:
+      - red-proyecto
+
+networks:
+  red-proyecto:
+    driver: bridge
+
+volumes:
+  postgres_data:
