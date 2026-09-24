@@ -5,7 +5,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 
-// Conexión usando variables de entorno pasadas por Docker Compose
+// Conexión usando variables de entorno pasadas por Docker Composer
 const pool = new Pool({
   host: process.env.DB_HOST || 'db',
   user: process.env.POSTGRES_USER,
